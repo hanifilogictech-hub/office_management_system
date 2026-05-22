@@ -1,36 +1,142 @@
-{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Office Management System - Attendance</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { margin: 0; padding: 0; background-color: #f8fafc; font-family: Arial, sans-serif; display: flex; }
+        .sidebar { width: 260px; height: 100vh; background: #0f172a; position: fixed; top: 0; left: 0; overflow-y: auto; padding-top: 20px; z-index: 1000; box-sizing: border-box; }
+        .logo-container { text-align: center; margin-bottom: 25px; padding: 0 20px; box-sizing: border-box; }
+        .sidebar-logo { max-width: 100%; height: auto; max-height: 60px; object-fit: contain; display: inline-block; }
+        .sidebar a, .dropdown-btn { padding: 14px 20px; text-decoration: none; color: white; display: block; width: 100%; border: none; background: transparent !important; text-align: left; cursor: pointer; font-size: 15px; box-sizing: border-box; outline: none; }
+        .sidebar a:hover, .dropdown-btn:hover { background: #1e293b !important; }
+        .dropdown-container { display: none; background: #111827; }
+        .dropdown-container a { padding-left: 45px; font-size: 14px; color: #cbd5e1; }
+        .dropdown-container a:hover { background: #1f2937 !important; color: white; }
+        .active { background: #334155 !important; color: white !important; }
+        .active-child { background: #1e293b !important; color: #3b82f6 !important; font-weight: bold; }
+        .main-content { margin-left: 260px; flex-grow: 1; padding: 40px; box-sizing: border-box; min-height: 100vh; }
+        .module-card { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 30px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
+    </style>
+</head>
+<body>
 
-{% block content %}
+    <div class="sidebar">
+        <div class="logo-container">
+            <img src="{% static 'logo.png' %}" alt="Logo" class="sidebar-logo">
+        </div>
+        <a href="#" id="nav-dashboard">Dashboard</a>
+        <button class="dropdown-btn">Office Information</button>
+        <div class="dropdown-container"><a href="#">Office Details</a><a href="#">Employee & Management Details</a><a href="#">Office Resources & Reports</a></div>
+        <button class="dropdown-btn">Roles</button>
+        <div class="dropdown-container"><a href="#">Role Information</a><a href="#">Access & Permissions</a><a href="#">Work Management</a></div>
+        <button class="dropdown-btn">Employee Management</button>
+        <div class="dropdown-container">
+            <a href="{% url 'employees_list' %}">Employees List</a>
+            <a href="{% url 'attendance' %}">Attendance</a>
+            <a href="{% url 'leave_requests' %}">Leave Requests</a>
+            <a href="{% url 'skills' %}">Skills</a>
+            <a href="{% url 'performance' %}">Performance</a>
+            <a href="{% url 'salary' %}">Salary</a>
+        </div>
+        <button class="dropdown-btn">Internship</button>
+        <div class="dropdown-container"><a href="/internship/intern-list/">Intern List</a><a href="/internship/syllabus/">Syllabus</a><a href="/internship/certification/">Certification</a></div>
+        <button class="dropdown-btn">Work Management</button>
+        <div class="dropdown-container"><a href="{% url 'daily_worksheet' %}">Daily Worksheet</a><a href="{% url 'assigned_tasks' %}">Assigned Tasks</a><a href="{% url 'work_reports' %}">Reports</a></div>
+        <button class="dropdown-btn">Project Management</button>
+        <div class="dropdown-container"><a href="/project/projects/">Projects</a><a href="/project/timeline/">Timeline</a><a href="/project/tasks/">Tasks</a></div>
+        <button class="dropdown-btn">Customer Management</button>
+        <div class="dropdown-container"><a href="/customer/customers/">Customers</a><a href="/customer/calls/">Calls</a><a href="/customer/targets/">Targets</a></div>
+        <a href="#">Reports</a><a href="#">Settings</a>
+    </div>
 
-<div class="card p-4">
+    <div class="main-content">
+        <div class="container-fluid p-0">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="module-card">
+                        <h2 class="h5 fw-bold mb-3 text-dark">Mark Attendance</h2>
+                        <form method="POST" action="{% url 'attendance' %}">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label class="form-label text-secondary fw-medium" style="font-size: 14px;">Select Employee</label>
+                                <select name="employee_id" class="form-select py-2" required style="border-color: #cbd5e1; font-size: 14px;">
+                                    <option value="" disabled selected>Choose an employee...</option>
+                                    {% for emp in employees %}
+                                        <option value="{{ emp.employee_id }}">{{ emp.name }} ({{ emp.employee_id }})</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-dark w-100 py-2 fw-medium" style="background-color: #0f172a; border: none; font-size: 14px;">Check In Present</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="module-card">
+                        <div class="border-bottom pb-2 mb-3"><h1 class="h4 m-0 fw-bold text-dark">Daily Attendance Logs</h1></div>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle" style="font-size: 14px;">
+                                <thead class="table-light">
+                                    <tr><th>Date</th><th>Employee Name</th><th>Check-In Time</th><th>Status</th></tr>
+                                </thead>
+                                <tbody>
+                                    {% if attendance_records %}
+                                        {% for record in attendance_records %}
+                                        <tr class="border-bottom">
+                                            <td class="py-3 px-3 fw-medium text-dark">{{ record.date|date:"M d, Y" }}</td>
+                                            <td class="py-3 px-3 text-dark">{{ record.employee.name }}</td>
+                                            <td class="py-3 px-3 text-muted">{{ record.check_in|time:"h:i A" }}</td>
+                                            <td class="py-3 px-3"><span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">{{ record.status }}</span></td>
+                                        </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                    <tr><td colspan="4" class="text-center text-muted py-4">No attendance check-ins recorded for today yet.</td></tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<h2>Attendance Module</h2>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        var dropdowns = document.getElementsByClassName("dropdown-btn");
+        for (var i = 0; i < dropdowns.length; i++) {
+            dropdowns[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var dropdownContent = this.nextElementSibling;
+                dropdownContent.style.display = (dropdownContent.style.display === "block") ? "none" : "block";
+            });
+        }
 
-<hr>
+        document.addEventListener("DOMContentLoaded", function() {
+            var currentUrl = window.location.pathname;
+            
+            // Don't auto-open menus if we are explicitly on the add-employee view page
+            if (currentUrl.includes("add-employee")) return;
 
-<h4>Purpose</h4>
-
-<p>
-Track employee daily attendance and working hours.
-</p>
-
-<h4>Features</h4>
-
-<ul>
-<li>Daily attendance</li>
-<li>Login / Logout tracking</li>
-<li>Late entry management</li>
-<li>Present / Absent details</li>
-</ul>
-
-<h4>Reports</h4>
-
-<ul>
-<li>Monthly attendance report</li>
-<li>Late entry report</li>
-<li>Attendance summary</li>
-</ul>
-
-</div>
-
-{% endblock %}
+            var sidebarLinks = document.querySelectorAll(".sidebar a");
+            sidebarLinks.forEach(function(link) {
+                var linkPath = link.getAttribute("href");
+                if (linkPath && currentUrl.includes(linkPath) && linkPath !== "#") {
+                    link.classList.add("active-child");
+                    var parentContainer = link.closest(".dropdown-container");
+                    if (parentContainer) {
+                        parentContainer.style.display = "block";
+                        var headerButton = parentContainer.previousElementSibling;
+                        if (headerButton && headerButton.classList.contains("dropdown-btn")) {
+                            headerButton.classList.add("active");
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,94 +1,58 @@
+{% load static %}
 <div class="sidebar">
 
-    <h2 class="logo">Office Management</h2>
+    <div class="logo-container">
+        <img src="{% static 'logo.png' %}" alt="Logo" class="sidebar-logo">
+    </div>
 
-    <a href="#">Dashboard</a>
+    <a href="#" id="nav-dashboard">Dashboard</a>
 
-    <button class="dropdown-btn">
-        Office Information
-    </button>
-
+    <button class="dropdown-btn">Office Information</button>
     <div class="dropdown-container">
         <a href="#">Office Details</a>
         <a href="#">Employee & Management Details</a>
         <a href="#">Office Resources & Reports</a>
     </div>
 
-    <button class="dropdown-btn">
-        Roles
-    </button>
-
+    <button class="dropdown-btn">Roles</button>
     <div class="dropdown-container">
         <a href="#">Role Information</a>
         <a href="#">Access & Permissions</a>
         <a href="#">Work Management</a>
     </div>
 
-    <button class="dropdown-btn">
-        Employee Management
-    </button>
-
+    <button class="dropdown-btn">Employee Management</button>
     <div class="dropdown-container">
-        <a href="{% url 'employees_list' %}">
-            Employees List
-        </a>
-        <a href="{% url 'attendance' %}">
-            Attendance
-        </a>
-        <a href="{% url 'leave_requests' %}">
-            Leave Requests
-        </a>
-        <a href="{% url 'skills' %}">
-            Skills
-        </a>
-        <a href="{% url 'performance' %}">
-            Performance
-        </a>
-        <a href="{% url 'salary' %}">
-            Salary
-        </a>
+        <a href="{% url 'employees_list' %}">Employees List</a>
+        <a href="{% url 'attendance' %}">Attendance</a>
+        <a href="{% url 'leave_requests' %}">Leave Requests</a>
+        <a href="{% url 'skills' %}">Skills</a>
+        <a href="{% url 'performance' %}">Performance</a>
+        <a href="{% url 'salary' %}">Salary</a>
     </div>
 
-    <button class="dropdown-btn">
-        Internship
-    </button>
-
+    <button class="dropdown-btn">Internship</button>
     <div class="dropdown-container">
         <a href="/internship/intern-list/">Intern List</a>
         <a href="/internship/syllabus/">Syllabus</a>
         <a href="/internship/certification/">Certification</a>
     </div>
 
-    <button class="dropdown-btn">
-        Work Management
-    </button>
-
+    <button class="dropdown-btn">Work Management</button>
     <div class="dropdown-container">
-        <a href="{% url 'daily_worksheet' %}">
-            Daily Worksheet
-        </a>
-        <a href="{% url 'assigned_tasks' %}">
-            Assigned Tasks
-        </a>
-        <a href="{% url 'work_reports' %}">
-            Reports
-        </a>
+        <a href="{% url 'daily_worksheet' %}">Daily Worksheet</a>
+        <a href="{% url 'assigned_tasks' %}">Assigned Tasks</a>
+        <a href="{% url 'work_reports' %}">Reports</a>
     </div>
 
-    <button class="dropdown-btn">
-        Project Management
-    </button>
-
+    <button class="dropdown-btn">Project Management</button>
     <div class="dropdown-container">
         <a href="/project/projects/">Projects</a>
         <a href="/project/timeline/">Timeline</a>
         <a href="/project/tasks/">Tasks</a>
     </div>
 
-    <button class="dropdown-btn">
-        Customer Management
-    </button>
-
+    <button class="dropdown-btn">Customer Management</button>
     <div class="dropdown-container">
         <a href="/customer/customers/">Customers</a>
         <a href="/customer/calls/">Calls</a>
@@ -96,102 +60,126 @@
     </div>
 
     <a href="#">Reports</a>
-
     <a href="#">Settings</a>
 
 </div>
 
-
-
 <style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+    }
 
-body{
-    margin:0;
-    font-family:Arial, sans-serif;
-}
+    /* Fixed Layout Sidebar Viewport Box */
+    .sidebar {
+        width: 260px;
+        height: 100vh;
+        background: #0f172a;
+        position: fixed;
+        top: 0;
+        left: 0;
+        overflow-y: auto;
+        padding-top: 20px;
+        z-index: 1000;
+    }
 
-/* Sidebar */
+    .logo-container {
+        text-align: center;
+        margin-bottom: 25px;
+        padding: 0 20px;
+        box-sizing: border-box;
+    }
 
-.sidebar{
-    width:260px;
-    height:100vh;
-    background:#0f172a;
-    position:fixed;
-    overflow-y:auto;
-    padding-top:20px;
-}
+    .sidebar-logo {
+        max-width: 100%;
+        height: auto;
+        max-height: 60px;
+        object-fit: contain;
+        display: inline-block;
+    }
 
-/* Logo */
+    .sidebar a,
+    .dropdown-btn {
+        padding: 14px 20px;
+        text-decoration: none;
+        color: white;
+        display: block;
+        width: 100%;
+        border: none;
+        background: transparent !important;
+        text-align: left;
+        cursor: pointer;
+        font-size: 15px;
+        box-sizing: border-box;
+        outline: none;
+    }
 
-.logo{
-    color:white;
-    text-align:center;
-    margin-bottom:30px;
-}
+    .sidebar a:hover,
+    .dropdown-btn:hover {
+        background: #1e293b !important;
+    }
 
-/* Main Links */
+    .dropdown-container {
+        display: none;
+        background: #111827;
+    }
 
-.sidebar a,
-.dropdown-btn{
-    padding:14px 20px;
-    text-decoration:none;
-    color:white;
-    display:block;
-    width:100%;
-    border:none;
-    background:transparent !important;
-    text-align:left;
-    cursor:pointer;
-    font-size:15px;
-    box-sizing: border-box;
-}
+    .dropdown-container a {
+        padding-left: 45px;
+        font-size: 14px;
+        color: #cbd5e1;
+    }
+    
+    .dropdown-container a:hover {
+        background: #1f2937 !important;
+        color: white;
+    }
 
-/* Hover */
+    .active {
+        background: #334155 !important;
+        color: white !important;
+    }
 
-.sidebar a:hover,
-.dropdown-btn:hover{
-    background:#1e293b !important;
-}
-
-/* Submenu */
-
-.dropdown-container{
-    display:none;
-    background:#1e293b;
-}
-
-/* Submenu Links */
-
-.dropdown-container a{
-    padding-left:45px;
-    font-size:14px;
-    color:#cbd5e1;
-}
-
-/* Active Button */
-
-.active{
-    background:#334155 !important;
-}
-
+    .active-child {
+        background: #1e293b !important;
+        color: #3b82f6 !important;
+        font-weight: bold;
+    }
 </style>
 
-
-
 <script>
+    // Handles clicking to manually open/close headers
+    var dropdowns = document.getElementsByClassName("dropdown-btn");
+    for (var i = 0; i < dropdowns.length; i++) {
+        dropdowns[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var dropdownContent = this.nextElementSibling;
+            if (dropdownContent.style.display === "block") {
+                dropdownContent.style.display = "none";
+            } else {
+                dropdownContent.style.display = "block";
+            }
+        });
+    }
 
-var dropdown = document.getElementsByClassName("dropdown-btn");
+    // Auto-opens and keeps the correct dropdown active based on what page you are visiting
+    document.addEventListener("DOMContentLoaded", function() {
+        var currentUrl = window.location.pathname;
+        var sidebarLinks = document.querySelectorAll(".sidebar a");
 
-for (var i = 0; i < dropdown.length; i++) {
-    dropdown[i].addEventListener("click", function() {
-        this.classList.toggle("active");
-        var dropdownContent = this.nextElementSibling;
-        if (dropdownContent.style.display === "block") {
-            dropdownContent.style.display = "none";
-        } else {
-            dropdownContent.style.display = "block";
-        }
+        sidebarLinks.forEach(function(link) {
+            var linkPath = link.getAttribute("href");
+            if (linkPath && currentUrl.includes(linkPath) && linkPath !== "#") {
+                link.classList.add("active-child");
+                var parentContainer = link.closest(".dropdown-container");
+                if (parentContainer) {
+                    parentContainer.style.display = "block";
+                    var headerButton = parentContainer.previousElementSibling;
+                    if (headerButton && headerButton.classList.contains("dropdown-btn")) {
+                        headerButton.classList.add("active");
+                    }
+                }
+            }
+        });
     });
-}
-
 </script>

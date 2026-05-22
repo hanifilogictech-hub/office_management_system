@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'language_exam',
     'reports',
     'settingsapp',
+
 ]
 
 MIDDLEWARE = [
@@ -66,11 +67,9 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
-
+        # Use the modern slash operator (/) instead of os.path.join
+        'DIRS': [BASE_DIR / 'templates'], 
         'APP_DIRS': True,
-
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.request',
@@ -130,3 +129,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
